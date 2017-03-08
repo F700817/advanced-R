@@ -1,0 +1,34 @@
+---
+title: "level test"
+author: "Jenny"
+date: "2017/3/8"
+output: html_document
+---
+
+# 1.找1出现两次的位置
+```{r}
+y<- c(1,0,0,1,1,1,0,1,1)
+findruns<-function(y,x,l){
+  n<-length(y)
+  runs<-NULL
+  for(i in 1:(n-1)){
+    if(all(y[i:(i+l-1)]==x))
+      runs<-c(runs,i)
+  }
+  return(runs)
+}
+findruns(y,1,2)
+```
+
+# 2.最低气温和最高气温差值
+```{r}
+raw<-read.delim("/Users/F970614/Desktop/AdvancedR-master/data/weather.txt",check.names = F, na.strings = ".")
+View(raw)
+library(reshape2)
+raw.tidy<-melt(raw,id=c("year","month","element"),variable.name="day",na.rm=T)
+View(raw.tidy)
+raw <- raw.tidy[, c("year", "month", "day","element", "value")]
+tidy <- dcast(raw, year + month + day ~ element,value.var = "value")
+tidy$difference<-tidy$tmax-tidy$tmin
+```
+
